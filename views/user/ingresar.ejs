@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Live</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+    <!--
+        Stylesheets and Preprocessors
+        ==============================
+
+        You can always bring in CSS files manually with `<link>` tags, or asynchronously
+        using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
+        of Sails' conventional asset pipeline (boilerplate Gruntfile).
+
+        By default, stylesheets from your `assets/styles` folder are included
+        here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
+        are supported. In production, your styles will be minified and concatenated into
+        a single file.
+
+        To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+        For example, here are a few things you could do:
+
+            + Change the order of your CSS files
+            + Import stylesheets from other directories
+            + Use a different or additional preprocessor, like SASS, SCSS or Stylus
+    -->
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <!--STYLES END-->
+  </head>
+
+  <body ng-app="userModule">
+  <div ng-controller="userController" class="container">
+        <center><h2>Bienvenidos al chat live</h2></center>
+  <br>
+  <div ng-hide="session" class="row">
+
+    <div class="col-sm-4" ></div>
+    <div class="col-sm-4" >
+       <form ng-submit="formNewUserSubmit()" class="form-singin" >
+          <label>Nombre</label>
+          <input class="form-control" ng-model="user.Nombre" type="text" name="Nombre" required />
+          <label>Apellido</label>
+          <input class="form-control" ng-model="user.Apellido" type="text" name="Apellido" required />
+          <label>Usuario</label>
+          <input class="form-control" ng-model="user.Usuario" type="text" name="Usuario" required />
+           
+          <label>Correo</label>
+          <input class="form-control" ng-model="user.Correo" type="text" name="Correo" required />
+           
+           <br>
+           <center><input class="btn btn-primary" type="submit" value="Guardar" /></center>
+  </form>
+
+    </div>
+   
+  </div >
+  
+  
+
+
+  <div ng-show="session"  class="container">
+    <div ng-controller="chatController" >
+     <center><h2>sala chat online</h2></center>
+        <input ng-model="nombreUsurioLogin" value="{{nombreUsurioLogin}}" id="nombreusurioLogin" type="text" style="display:none ;" >
+        <input ng-model="habloCon" id="habloCon" type="text"  style="display:none ;" >
+        <input ng-model="idRec" id="idRec" type="text"  style="display:none ;" >
+   
+    <!-- Usuario activos -->
+      <div class=" col-sm-3 panel panel-default">
+        <div class="panel-heading" >Usuarios activos
+        </div>
+        <div id="UserActive" class="panel-body">
+           <div ng-repeat="user in users" >
+            <div>
+              <button ng-if="user.Nombre !== nombreUsurioLogin" class="btn btn-default" ng-click="chatPrivado(user.id,user.Nombre);" ><span class="ntf" id="ntf{{user.Nombre}}">1</span>{{user.Nombre}}</button>
+            </div>
+              
+           </div>
+        </div>
+      </div> 
+       
+    
+
+
+<div class="col-sm-4" ng-show="chatActive" >
+      <div class="panel panel-primary" id="ContentChatPrivado" >
+      <div class="panel-heading" > chat Privado Con {{habloCon}}
+        </div>
+        <div id="panelChatPrivado" class="panel-body pre-scrollable">
+            <div  ng-repeat="ChatPrivate in chatsPrivate">
+                <p ng-if="ChatPrivate.NombreEm === nombreUsurioLogin" style="text-align: right;">{{ChatPrivate.msg}}</p>
+                 <p ng-if="ChatPrivate.NombreEm !== nombreUsurioLogin" style="text-align: left;">{{ChatPrivate.msg}}</p>
+             </div>
+        </div>
+         <div>
+          <form id="formMensajeChatPrivado" ng-submit="formNewMsgPrivate()" >
+          <input id="codigoChat" type="number" style="display:none;" >
+          <input id="mensajeChatPrivado" ng-model="msgChatPrivado" type="text" class="form-control input-lg" >
+           <button  id="msgPrivado" class="btn btn-lg" type="submit" style="display:none;" >Enviar</button>
+
+          </form>
+         </div>
+      </div>
+</div>
+
+          <!-- Contenido Del Chat -->
+    <div  class="col-sm-5">
+      
+      <div class="panel panel-success" id="chatContent" >
+        <div class="panel-heading" >Chat Global
+        </div> 
+        <div class="panel-body pre-scrollable">
+          <div id="ChatGroup">
+          
+        </div>
+        </div>
+          <form id="formMensaje" ng-submit="formNewMsgGroup()">
+           <input id="mensaje" ng-model="msgGroup" type="text" class="form-control input-lg">
+           <button style="display: none;" class="btn btn-lg" type="submit">Enviar</button>
+
+          </form>
+       </div>
+     </div>
+
+
+    
+
+
+
+   </div>
+  </div>
+</div>
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+
+    <!--SCRIPTS-->
+    <script src="/dependencies/sails.io.js"></script>
+    <script src="/dependencies/angular.js"></script>
+    <script src="/dependencies/jquery-2.1.1.js"></script>
+    <script src="/js/Module.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/public/Message/msgService.js"></script>
+    <script src="/js/public/user/userService.js"></script>
+    <!--SCRIPTS END-->
+  </body>
+</html>
